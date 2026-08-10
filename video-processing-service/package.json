@@ -18,6 +18,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.21.0",
     "express": "^5.2.1",
     "fluent-ffmpeg": "^2.1.3"
   }
