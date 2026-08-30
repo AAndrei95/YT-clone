@@ -46,11 +46,18 @@ export function convertVideo(rawVideoName: string, processedVideoName: string) {
  * {@link rawVideoBucketName} bucket into {@link localRawVideoPath} directory.
  * @returns A promise that resolves when the video has been downloaded.
  */
+console.log("Project:", process.env.GOOGLE_CLOUD_PROJECT);
+console.log("Raw bucket:", rawVideoBucketName);
+console.log("Processed bucket:", processedVideoBucketName);
+
 export async function downloadRawVideo(fileName:string) {
+    console.log("Downloading:");
+    console.log("Bucket:", rawVideoBucketName);
+    console.log("File:", fileName);
     await storage.bucket(rawVideoBucketName)
         .file(fileName)
         .download({destination: `${localRawVideoPath}/${fileName}`});
-    console.log('gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}.');
+    console.log(`gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}.`);
 }
 
 /**
@@ -58,15 +65,18 @@ export async function downloadRawVideo(fileName:string) {
  * {@link localProcessedVideoPath} directory into {@link processedVideoBucketName} bucket.
  * @returns A promise that resolves when the video has been uploaded.
  */
+
+console.log("Uploading:");
+console.log("Bucket:", processedVideoBucketName);
 export async function uploadProcessedVideo(fileName:string) {
     const bucket = storage.bucket(processedVideoBucketName);
 
     await bucket.upload(`${localProcessedVideoPath}/${fileName}`, {
         destination: fileName,
     });
-    console.log('${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}.');
+    console.log(`${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}.`);
 
-    await bucket.file(fileName).makePublic(); // Make the uploaded file public
+    // await bucket.file(fileName).makePublic(); // Make the uploaded file public
 }
 
 /**
@@ -93,18 +103,18 @@ export function deleteProcessedVideo(fileName:string) {
  */
 export async function deleteLocalFile(filePath: string) {
     return new Promise<void>((resolve, reject) => {
-        if (!fs.existsSync(filePath)) {
+        if (fs.existsSync(filePath)) {
             fs.unlink(filePath, (err) => {
                 if (err) {
-                    console.error('Error deleting file at ${filePath}:', err);
+                    console.error(`Error deleting file at ${filePath}:`, err);
                     reject(err);
                 } else {
-                    console.log('File at ${filePath} deleted successfully.');
+                    console.log(`File at ${filePath} deleted successfully.`);
                     resolve();
                 }
             });
         } else {
-            console.log('File not found at ${filePath}, skipping deletion.');
+            console.log(`File not found at ${filePath}, skipping deletion.`);
             resolve();
         }
     });
@@ -117,6 +127,6 @@ export async function deleteLocalFile(filePath: string) {
 function ensureDirectoryExists(directoryPath: string) {
     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath, { recursive: true }); // recursive: true ensures that parent directories are created if they don't exist
-        console.log('Directory created at ${directoryPath}');
+        console.log(`Directory created at ${directoryPath}`);
     }
 }

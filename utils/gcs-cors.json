@@ -1,8 +1,8 @@
 [
-    {
-        "origin": ["*"],
-        "responseHeader": ["Content-Type"],
-        "merthod": ["PUT"],
-        "maxAgeSeconds": 3600
-    }
+  {
+    "origin": ["http://localhost:3000"],
+    "method": ["PUT"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
 ]

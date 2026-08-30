@@ -1,7 +1,7 @@
 import { exp } from 'firebase/firestore/pipelines';
 import {getFunctions, httpsCallable} from 'firebase/functions';
 
-const functions = getFunctions();
+const functions = getFunctions(undefined, 'europe-west2');
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 
