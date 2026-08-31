@@ -25,7 +25,7 @@ app.post('/process-video', async (req, res) => {
   const outputFileName = `processed-${inputFileName}`;
   const videoId = inputFileName.split('.')[0];
 
-  if (!isVideoNew(videoId)) {
+  if (!( await isVideoNew(videoId))) {
     return res.status(400).send('Bad Request: video already processing or processed.');
   } else {
     await setVideo(videoId, {
@@ -41,7 +41,6 @@ app.post('/process-video', async (req, res) => {
   // Convert the video to 360p
   try {
     await convertVideo(inputFileName, outputFileName);
-
   } catch (error) {
     await Promise.all([
       deleteRawVideo(inputFileName),
@@ -53,9 +52,8 @@ app.post('/process-video', async (req, res) => {
 
   // Upload the processed video to the Cloud Storage
   await uploadProcessedVideo(outputFileName);
-
   await setVideo(videoId, {
-    status: 'precessed',
+    status: 'processed',
     filename: outputFileName
   });
 

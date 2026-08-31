@@ -1,8 +1,9 @@
-import { initializeApp, applicationDefault } from "firebase-admin";
+import { initializeApp, applicationDefault } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
 initializeApp({
     credential: applicationDefault(),
+    projectId: "yt-clone-43ebc",
 });
 
 const firestore = getFirestore("yt-clone-43ebc");
@@ -13,7 +14,7 @@ export interface Video {
     id?: string,
     uid?: string,
     filename?: string,
-    status?: 'processing' | 'precessed',
+    status?: 'processing' | 'processed',
     title?: string,
     description?: string
 }
