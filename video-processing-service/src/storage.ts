@@ -46,14 +46,8 @@ export function convertVideo(rawVideoName: string, processedVideoName: string) {
  * {@link rawVideoBucketName} bucket into {@link localRawVideoPath} directory.
  * @returns A promise that resolves when the video has been downloaded.
  */
-console.log("Project:", process.env.GOOGLE_CLOUD_PROJECT);
-console.log("Raw bucket:", rawVideoBucketName);
-console.log("Processed bucket:", processedVideoBucketName);
 
 export async function downloadRawVideo(fileName:string) {
-    console.log("Downloading:");
-    console.log("Bucket:", rawVideoBucketName);
-    console.log("File:", fileName);
     await storage.bucket(rawVideoBucketName)
         .file(fileName)
         .download({destination: `${localRawVideoPath}/${fileName}`});
@@ -66,8 +60,6 @@ export async function downloadRawVideo(fileName:string) {
  * @returns A promise that resolves when the video has been uploaded.
  */
 
-console.log("Uploading:");
-console.log("Bucket:", processedVideoBucketName);
 export async function uploadProcessedVideo(fileName:string) {
     const bucket = storage.bucket(processedVideoBucketName);
 
@@ -76,7 +68,7 @@ export async function uploadProcessedVideo(fileName:string) {
     });
     console.log(`${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}.`);
 
-    // await bucket.file(fileName).makePublic(); // Make the uploaded file public
+    await bucket.file(fileName).makePublic(); // Make the uploaded file public
 }
 
 /**

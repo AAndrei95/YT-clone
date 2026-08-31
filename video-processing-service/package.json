@@ -20,6 +20,7 @@
   "dependencies": {
     "@google-cloud/storage": "^7.21.0",
     "express": "^5.2.1",
+    "firebase-admin": "^14.3.0",
     "fluent-ffmpeg": "^2.1.3"
   }
 }
