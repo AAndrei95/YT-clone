@@ -12,6 +12,17 @@ const firestore = getFirestore("yt-clone-43ebc");
 const rawVideoBucketName =
   process.env.RAW_VIDEO_BUCKET_NAME || "aa-yt-raw-videos";
 
+const videoCollectionId ="videos";
+
+export interface Video {
+  id?: string,
+  uid?: string,
+  filename?: string,
+  status?: "processing" | "processed",
+  title?: string,
+  description?: string,
+}
+
 export const createUser = functions
   .region("europe-west2")
   .auth.user()
@@ -55,4 +66,14 @@ export const generateUploadUrl = onCall(
     });
 
     return {url, fileName};
+  });
+
+export const getVideos = onCall(
+  {
+    region: "europe-west2",
+    maxInstances: 1,
+  }, async () => {
+    const snapshot =
+      await firestore.collection(videoCollectionId).limit(10).get();
+    return snapshot.docs.map((doc) => doc.data());
   });
