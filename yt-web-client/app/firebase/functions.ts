@@ -20,7 +20,8 @@ export async function uploadVideo(file: File) {
         body: file,
         headers: {
             'Content-Type': file.type
-        }
+        },
+        cache: 'no-cache'
     });
     
     return uploadResult;
