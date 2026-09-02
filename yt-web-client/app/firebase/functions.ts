@@ -1,9 +1,12 @@
-import { exp } from 'firebase/firestore/pipelines';
-import {getFunctions, httpsCallable} from 'firebase/functions';
+import { httpsCallable } from 'firebase/functions';
+import { functions } from './firebase';
 
-const functions = getFunctions(undefined, 'europe-west2');
+export type Video = {
+    [key: string]: any;
+};
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
+const getVideosFunction = httpsCallable(functions, 'getVideos');
 
 export async function uploadVideo(file: File) {
 
@@ -12,7 +15,7 @@ export async function uploadVideo(file: File) {
     });
 
     //Upload the file via de signed Url
-    await fetch(response?.data?.url, {
+    const uploadResult = await fetch(response?.data?.url, {
         method: 'PUT',
         body: file,
         headers: {
@@ -20,5 +23,10 @@ export async function uploadVideo(file: File) {
         }
     });
     
-    return; 
+    return uploadResult;
+}
+
+export async function getVideos() {
+    const response = await getVideosFunction();
+    return response.data as Video[];
 }

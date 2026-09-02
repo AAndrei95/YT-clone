@@ -1,16 +1,22 @@
 import Image from "next/image";
+import { getVideos } from "./firebase/functions";
+import Link from "next/link";
+import styles from './page.module.css';
 
-export default function Home() {
+export default async function Home() {
+  const videos = await getVideos();
+  
+  console.log(videos);
+
   return (
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
+      <main>
+       {  videos.map((video) => ( 
+            <Link href={`/watch?v=${video.filename}`}>
+              <Image src={'/thumbnail.png'} alt='video' width={120} height={80}
+                className={styles.thumbnail}/>
+            </Link>
+            ))
+        }
       </main>
   );
 }
